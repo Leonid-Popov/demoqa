@@ -5,6 +5,7 @@ import com.codeborne.selenide.Selenide;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.$;
 
 public class TextBoxTest extends BaseTest {
@@ -29,10 +30,10 @@ public class TextBoxTest extends BaseTest {
         $("[id=submit]").click();
 
         //Проверяем результат
-        $("[id=output]").$("[id=name]").shouldHave(Condition.text(userName));
-        $("[id=output]").$("[id=email]").shouldHave(Condition.text(userEmail));
-        $("[id=output]").$("[id=currentAddress]").shouldHave(Condition.text(currentAddress));
-        $("[id=output]").$("[id=permanentAddress]").shouldHave(Condition.text(permanentAddress));
+        $("[id=output]").$("[id=name]").shouldHave(text(userName));
+        $("[id=output]").$("[id=email]").shouldHave(text(userEmail));
+        $("[id=output]").$("[id=currentAddress]").shouldHave(text(currentAddress));
+        $("[id=output]").$("[id=permanentAddress]").shouldHave(text(permanentAddress));
 
     }
 

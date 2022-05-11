@@ -23,6 +23,7 @@ public class RegistrationFormTest extends BaseTest {
         $("[id=firstName]").setValue(name);
         $("[id=lastName]").setValue(lastName);
         $("[id=userEmail]").setValue(userEmail);
+        $("[name=gender][value=Male]").click();
 
 
     }
