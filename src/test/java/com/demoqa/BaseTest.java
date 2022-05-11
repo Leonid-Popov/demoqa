@@ -1,5 +1,6 @@
 package com.demoqa;
 
+import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.WebDriverRunner;
 import org.junit.jupiter.api.AfterAll;
@@ -12,12 +13,14 @@ public class BaseTest {
     @BeforeAll
     static void beforeAll() {
         System.out.println("#### Start tests ####");
+        Configuration.baseUrl = "https://demoqa.com";
+        Configuration.browserSize = "1920x1080";
     }
 
-    @BeforeEach
-    void openPage() {
-        Selenide.open("https://demoqa.com/automation-practice-form");
-    }
+//    @BeforeEach
+//    void openPage() {
+//        Selenide.open("/automation-practice-form");
+//    }
 
     @AfterEach
     void closePage() {
