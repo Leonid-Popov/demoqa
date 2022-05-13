@@ -36,5 +36,4 @@ public class TextBoxTest extends BaseTest {
         $("[id=output]").$("[id=permanentAddress]").shouldHave(text(permanentAddress));
 
     }
-
 }

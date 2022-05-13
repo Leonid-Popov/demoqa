@@ -14,13 +14,9 @@ public class BaseTest {
     static void beforeAll() {
         System.out.println("#### Start tests ####");
         Configuration.baseUrl = "https://demoqa.com";
-        Configuration.browserSize = "1920x1080";
+        Configuration.browserSize = "1366x768";
+//        Configuration.browserSize = "1920x1080";
     }
-
-//    @BeforeEach
-//    void openPage() {
-//        Selenide.open("/automation-practice-form");
-//    }
 
     @AfterEach
     void closePage() {
