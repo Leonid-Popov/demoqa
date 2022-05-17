@@ -1,5 +1,7 @@
 package com.demoqa;
 
+import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
 import org.junit.jupiter.api.BeforeEach;
@@ -45,7 +47,7 @@ public class WebTablesTests extends BaseTest {
     }
 
     @Test
-    void searchFieldTest(){
+    void searchFieldTest() {
         //Заполняем форму
         $("#addNewRecordButton").click();
         $(".modal-title").shouldHave(text("Registration Form"));
@@ -57,9 +59,24 @@ public class WebTablesTests extends BaseTest {
         $("#department").setValue(department);
         $("#submit").click();
 
+        //Ищем юзера по email
+        $("#searchBox").click();
+        $("#searchBox").setValue(userEmail);
 
+        //Проверяем результат фильтрации
+        ElementsCollection tableValues = $$(".rt-tr-group");
+        for (int i = 1; i < tableValues.size(); i++) {
+            //Проверяем результат поиска в первой строке
+            SelenideElement element = $$(".rt-tr-group").get(0);
+            element.shouldHave(text(name), text(lastName), text("30"), text(userEmail), text("50000"), text(department));
+
+            //Проверяем что остальные строки пустые
+            SelenideElement emptyRow = $$(".rt-tr-group").get(i);
+            emptyRow.shouldBe(Condition.empty);
+        }
+
+
+
+        // сортировки (алфавит, возраст)
     }
-    // окно поиска + проверка значения
-    // сортировки (алфавит, возраст)
-
 }
