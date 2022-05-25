@@ -1,15 +1,11 @@
 package com.demoqa;
 
-import com.codeborne.selenide.Condition;
-import com.codeborne.selenide.ElementsCollection;
-import com.codeborne.selenide.Selenide;
-import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.Condition.text;
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.$$;
+import static com.codeborne.selenide.Selenide.*;
 
 public class WebTablesTests extends BaseTest {
 
@@ -74,9 +70,22 @@ public class WebTablesTests extends BaseTest {
             SelenideElement emptyRow = $$(".rt-tr-group").get(i);
             emptyRow.shouldBe(Condition.empty);
         }
+    }
 
+    @Test
+    void sortTableTest() {
+        //Сортируем элементы по фамилии
+        $x("//div[text() = 'Last Name']/..").click();
 
+        //Проверяем результат фильтрации
+        ElementsCollection tableValues;
+        tableValues = $$(".rt-tr-group").shouldBe(CollectionCondition.textsInAnyOrder("A-z"));
+//        for (int i = 1; i < tableValues.size(); i++) {
+//            SelenideElement row = $$(".rt-tr-group").get(i);
+//            row.shouldBe(Condition.empty);
+//        }
 
-        // сортировки (алфавит, возраст)
     }
 }
+
+
