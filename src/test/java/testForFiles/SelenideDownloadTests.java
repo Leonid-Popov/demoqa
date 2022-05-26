@@ -3,18 +3,25 @@ package testForFiles;
 import com.codeborne.pdftest.PDF;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.xlstest.XLS;
+import com.opencsv.CSVReader;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 import static com.codeborne.selenide.Selenide.$;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class SelenideDownloadTests {
+
+    ClassLoader cl = getClass().getClassLoader();
 
     @Test
     void downloadFileTest() throws Exception {
@@ -29,17 +36,46 @@ public class SelenideDownloadTests {
 
     @Test
     void pdfParsingTest() throws Exception {
-        InputStream stream = getClass().getClassLoader().getResourceAsStream("files/pdf/junit-user-guide-5.8.2.pdf");
-        PDF pdf = new PDF(stream);
-        Assertions.assertEquals(166, pdf.numberOfPages);
+        try (InputStream stream = cl.getResourceAsStream("files/pdf/junit-user-guide-5.8.2.pdf")) {
+
+            PDF pdf = new PDF(stream);
+            Assertions.assertEquals(166, pdf.numberOfPages);
+        }
     }
 
     @Test
     void xlsParsingTest() throws Exception {
-        InputStream stream = getClass().getClassLoader().getResourceAsStream("files/xls/clinics.xlsx");
-        XLS xls = new XLS(stream);
-        String stringCellValue = xls.excel.getSheetAt(0).getRow(12).getCell(6).getStringCellValue();
-        assertThat(stringCellValue).contains("Поликлиника");
+        try (InputStream stream = cl.getResourceAsStream("files/xls/clinics.xlsx")) {
+
+            XLS xls = new XLS(stream);
+            String stringCellValue = xls.excel.getSheetAt(0).getRow(12).getCell(6).getStringCellValue();
+            assertThat(stringCellValue).contains("Поликлиника");
+        }
+    }
+
+    @Test
+    void csvParsingTest() throws Exception {
+        try (InputStream stream = cl.getResourceAsStream("files/csv/csvTest.csv");
+             CSVReader reader = new CSVReader(new InputStreamReader(stream, StandardCharsets.UTF_8))) {
+
+            List<String[]> content = reader.readAll();
+            assertThat(content).contains(
+                    new String[]{"City", "Country", "Language"},
+                    new String[]{"Novosibirsk", "Russia", "Russian"},
+                    new String[]{"Moscow", "Russia", "Russian"},
+                    new String[]{"Toronto", "Canada", "English"},
+                    new String[]{"London", "Great Britain", "English"}
+            );
+        }
+    }
+
+    @Test
+    void zipParsingTest() throws Exception {
+        ZipInputStream is = new ZipInputStream(cl.getResourceAsStream("files/zip/junit-user-guide.zip"));
+        ZipEntry entry;
+        while ((entry = is.getNextEntry()) != null) {
+            assertThat(entry.getName()).isEqualTo("junit-user-guide-5.8.2.pdf");
+        }
     }
 }
 
