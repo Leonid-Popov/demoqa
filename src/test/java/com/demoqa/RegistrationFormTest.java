@@ -41,6 +41,7 @@ public class RegistrationFormTest extends BaseTest {
         $(".react-datepicker__month-select").selectOption("March");
         $(".react-datepicker__day--023").click();
 
+        //Выбираем увлечения
         $("#subjectsInput").setValue("Math").pressEnter();
         $("#hobbiesWrapper").$(byText("Sports")).click();
         $("#uploadPicture").uploadFile(new File("/Users/gost/Desktop/QA GURU/pic.png"));

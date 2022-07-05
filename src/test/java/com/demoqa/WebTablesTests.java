@@ -1,6 +1,8 @@
 package com.demoqa;
 
-import com.codeborne.selenide.*;
+import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.ElementsCollection;
+import com.codeborne.selenide.SelenideElement;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -11,7 +13,7 @@ public class WebTablesTests extends BaseTest {
 
     @BeforeEach
     void openPage() {
-        Selenide.open("/webtables");
+        open("/webtables");
     }
 
     String name = "Leonid";
@@ -71,21 +73,9 @@ public class WebTablesTests extends BaseTest {
             emptyRow.shouldBe(Condition.empty);
         }
     }
-
-    @Test
-    void sortTableTest() {
-        //Сортируем элементы по фамилии
-        $x("//div[text() = 'Last Name']/..").click();
-
-        //Проверяем результат фильтрации
-        ElementsCollection tableValues;
-        tableValues = $$(".rt-tr-group").shouldBe(CollectionCondition.textsInAnyOrder("A-z"));
-//        for (int i = 1; i < tableValues.size(); i++) {
-//            SelenideElement row = $$(".rt-tr-group").get(i);
-//            row.shouldBe(Condition.empty);
-//        }
-
-    }
 }
+
+
+
 
 
