@@ -10,15 +10,12 @@ import java.io.File;
 import static com.codeborne.selenide.Condition.cssClass;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selectors.byText;
+import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$x;
+import static io.qameta.allure.Allure.step;
 
 public class RegistrationFormTest extends BaseTest {
-
-    @BeforeEach
-    void openPage() {
-        Selenide.open("/automation-practice-form");
-    }
 
     @Test
     void fillStudentRegForm() {
@@ -28,35 +25,41 @@ public class RegistrationFormTest extends BaseTest {
         String userNumber = "89139584699";
         String currentAddress = "Some address 123";
 
-        $(".practice-form-wrapper").shouldHave(text("Student Registration Form"));
-        $("#firstName").setValue(name);
-        $("#lastName").setValue(lastName);
-        $("#userEmail").setValue(userEmail);
-        $("#genterWrapper").$(byText("Male")).click();
-        $("#userNumber").setValue(userNumber);
+        step("Open registration form", () -> {
+            open("/automation-practice-form");
+            $(".practice-form-wrapper").shouldHave(text("Student Registration Form"));
+        });
 
-        //Выбираем дату рождения в календаре
-        $("#dateOfBirthInput").click();
-        $(".react-datepicker__year-select").selectOption("1992");
-        $(".react-datepicker__month-select").selectOption("March");
-        $(".react-datepicker__day--023").click();
+        step("Fill registration form", () -> {
+            $("#firstName").setValue(name);
+            $("#lastName").setValue(lastName);
+            $("#userEmail").setValue(userEmail);
+            $("#genterWrapper").$(byText("Male")).click();
+            $("#userNumber").setValue(userNumber);
 
-        //Выбираем увлечения
-        $("#subjectsInput").setValue("Math").pressEnter();
-        $("#hobbiesWrapper").$(byText("Sports")).click();
-        $("#uploadPicture").uploadFile(new File("/Users/gost/Desktop/QA GURU/pic.png"));
+            //Выбираем дату рождения в календаре
+            $("#dateOfBirthInput").click();
+            $(".react-datepicker__year-select").selectOption("1992");
+            $(".react-datepicker__month-select").selectOption("March");
+            $(".react-datepicker__day--023").click();
 
-        $("#currentAddress").setValue(currentAddress);
+            //Выбираем увлечения
+            $("#subjectsInput").setValue("Math").pressEnter();
+            $("#hobbiesWrapper").$(byText("Sports")).click();
+            $("#uploadPicture").uploadFile(new File("/Users/gost/Desktop/QA GURU/pic.png"));
 
-        $("#state").scrollTo();
-        $("#state").click();
-        $("#stateCity-wrapper").$(byText("NCR")).click();
-        $("#city").click();
-        $("#stateCity-wrapper").$(byText("Delhi")).click();
+            $("#currentAddress").setValue(currentAddress);
+
+            $("#state").scrollTo();
+            $("#state").click();
+            $("#stateCity-wrapper").$(byText("NCR")).click();
+            $("#city").click();
+            $("#stateCity-wrapper").$(byText("Delhi")).click();
+        });
 
         //todo баг, кнопка скрыта. разобраться
-        $("#submit").click();
-
+        step("Submit registration form", () -> {
+            $("#submit").click();
+        });
     }
-
 }

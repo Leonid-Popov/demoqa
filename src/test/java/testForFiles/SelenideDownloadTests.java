@@ -16,7 +16,9 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.Selenide.$;
+import static io.qameta.allure.Allure.step;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class SelenideDownloadTests {
@@ -25,48 +27,56 @@ public class SelenideDownloadTests {
 
     @Test
     void downloadFileTest() throws Exception {
-        Selenide.open("https://github.com/junit-team/junit5/blob/main/README.md");
-        File simpleFile = $("#raw-url").download();
-        try (InputStream is = new FileInputStream(simpleFile)) {
-            byte[] fileContent = is.readAllBytes();
-            String strContent = new String(fileContent, StandardCharsets.UTF_8);
-            assertThat(strContent).contains("JUnit 5");
-        }
+        step("Open github", () -> {
+            open("https://github.com/junit-team/junit5/blob/main/README.md");
+            File simpleFile = $("#raw-url").download();
+            try (InputStream is = new FileInputStream(simpleFile)) {
+                byte[] fileContent = is.readAllBytes();
+                String strContent = new String(fileContent, StandardCharsets.UTF_8);
+                assertThat(strContent).contains("JUnit 5");
+            }
+        });
     }
 
     @Test
     void pdfParsingTest() throws Exception {
-        try (InputStream stream = cl.getResourceAsStream("files/pdf/junit-user-guide-5.8.2.pdf")) {
+        step("Check .pdf file", () -> {
+            try (InputStream stream = cl.getResourceAsStream("files/pdf/junit-user-guide-5.8.2.pdf")) {
 
-            PDF pdf = new PDF(stream);
-            Assertions.assertEquals(166, pdf.numberOfPages);
-        }
+                PDF pdf = new PDF(stream);
+                Assertions.assertEquals(166, pdf.numberOfPages);
+            }
+        });
     }
 
     @Test
     void xlsParsingTest() throws Exception {
-        try (InputStream stream = cl.getResourceAsStream("files/xls/clinics.xlsx")) {
+        step("Check .xlsx file", () -> {
+            try (InputStream stream = cl.getResourceAsStream("files/xls/clinics.xlsx")) {
 
-            XLS xls = new XLS(stream);
-            String stringCellValue = xls.excel.getSheetAt(0).getRow(12).getCell(6).getStringCellValue();
-            assertThat(stringCellValue).contains("Поликлиника");
-        }
+                XLS xls = new XLS(stream);
+                String stringCellValue = xls.excel.getSheetAt(0).getRow(12).getCell(6).getStringCellValue();
+                assertThat(stringCellValue).contains("Поликлиника");
+            }
+        });
     }
 
     @Test
     void csvParsingTest() throws Exception {
-        try (InputStream stream = cl.getResourceAsStream("files/csv/csvTest.csv");
-             CSVReader reader = new CSVReader(new InputStreamReader(stream, StandardCharsets.UTF_8))) {
+        step("Check .csv file", () -> {
+            try (InputStream stream = cl.getResourceAsStream("files/csv/csvTest.csv");
+                 CSVReader reader = new CSVReader(new InputStreamReader(stream, StandardCharsets.UTF_8))) {
 
-            List<String[]> content = reader.readAll();
-            assertThat(content).contains(
-                    new String[]{"City", "Country", "Language"},
-                    new String[]{"Novosibirsk", "Russia", "Russian"},
-                    new String[]{"Moscow", "Russia", "Russian"},
-                    new String[]{"Toronto", "Canada", "English"},
-                    new String[]{"London", "Great Britain", "English"}
-            );
-        }
+                List<String[]> content = reader.readAll();
+                assertThat(content).contains(
+                        new String[]{"City", "Country", "Language"},
+                        new String[]{"Novosibirsk", "Russia", "Russian"},
+                        new String[]{"Moscow", "Russia", "Russian"},
+                        new String[]{"Toronto", "Canada", "English"},
+                        new String[]{"London", "Great Britain", "English"}
+                );
+            }
+        });
     }
 
     @Test
