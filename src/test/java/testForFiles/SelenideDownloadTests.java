@@ -5,6 +5,7 @@ import com.codeborne.selenide.Selenide;
 import com.codeborne.xlstest.XLS;
 import com.opencsv.CSVReader;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -39,6 +40,7 @@ public class SelenideDownloadTests {
     }
 
     @Test
+    @DisplayName("Parse PDF test")
     void pdfParsingTest() throws Exception {
         step("Check .pdf file", () -> {
             try (InputStream stream = cl.getResourceAsStream("files/pdf/junit-user-guide-5.8.2.pdf")) {
@@ -50,10 +52,12 @@ public class SelenideDownloadTests {
     }
 
     @Test
+    @DisplayName("Parse .xlsx test")
     void xlsParsingTest() throws Exception {
         step("Check .xlsx file", () -> {
             try (InputStream stream = cl.getResourceAsStream("files/xls/clinics.xlsx")) {
 
+                assert stream != null;
                 XLS xls = new XLS(stream);
                 String stringCellValue = xls.excel.getSheetAt(0).getRow(12).getCell(6).getStringCellValue();
                 assertThat(stringCellValue).contains("Поликлиника");
@@ -62,6 +66,7 @@ public class SelenideDownloadTests {
     }
 
     @Test
+    @DisplayName("Parse CSV test")
     void csvParsingTest() throws Exception {
         step("Check .csv file", () -> {
             try (InputStream stream = cl.getResourceAsStream("files/csv/csvTest.csv");
@@ -80,6 +85,7 @@ public class SelenideDownloadTests {
     }
 
     @Test
+    @DisplayName("Parse ZIP file test")
     void zipParsingTest() throws Exception {
         ZipInputStream is = new ZipInputStream(cl.getResourceAsStream("files/zip/junit-user-guide.zip"));
         ZipEntry entry;

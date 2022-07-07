@@ -4,6 +4,7 @@ import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
@@ -27,6 +28,7 @@ public class WebTablesTests extends BaseTest {
     String department = "Some Department";
 
     @Test
+    @DisplayName("Successfull fill table test")
     void textBoxTest() {
         //Заполняем форму
         step("Fill form", () -> {
@@ -54,6 +56,7 @@ public class WebTablesTests extends BaseTest {
     }
 
     @Test
+    @DisplayName("Search user by email test")
     void searchFieldTest() {
         //Заполняем форму
         step("Fill form", () -> {
@@ -69,7 +72,7 @@ public class WebTablesTests extends BaseTest {
         });
 
         //Ищем юзера по email
-        step("Search user bt Email", () -> {
+        step("Search user by Email", () -> {
             $("#searchBox").click();
             $("#searchBox").setValue(userEmail);
         });

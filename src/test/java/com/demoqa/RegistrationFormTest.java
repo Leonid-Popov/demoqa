@@ -18,6 +18,7 @@ import static io.qameta.allure.Allure.step;
 public class RegistrationFormTest extends BaseTest {
 
     @Test
+    @DisplayName("Successful fill student registration form test")
     void fillStudentRegForm() {
         String name = "Leonid";
         String lastName = "Popov";
