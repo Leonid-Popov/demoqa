@@ -23,7 +23,7 @@ public class RegistrationFormTest extends BaseTest {
         String name = "Leonid";
         String lastName = "Popov";
         String userEmail = "leo.popov666@gmail.com";
-        String userNumber = "89139584699";
+        String userNumber = "9139584699";
         String currentAddress = "Some address 123";
 
         step("Open registration form", () -> {
@@ -62,6 +62,20 @@ public class RegistrationFormTest extends BaseTest {
 
         step("Submit registration form", () -> {
             $("#submit").click();
+        });
+
+        //проверяем заполненную форму
+        step("Verify registration data", () -> {
+            $("#example-modal-sizes-title-lg").shouldHave(text("Thanks for submitting the form"));
+            $x("//td[text() = 'Student Name']/../td[2]").shouldHave(text(name + " " + lastName));
+            $x("//td[text() = 'Student Email']/../td[2]").shouldHave(text(userEmail));
+            $x("//td[text() = 'Gender']/../td[2]").shouldHave(text("Male"));
+            $x("//td[text() = 'Mobile']/../td[2]").shouldHave(text(userNumber));
+            $x("//td[text() = 'Date of Birth']/../td[2]").shouldHave(text("23 March,1992"));
+            $x("//td[text() = 'Subjects']/../td[2]").shouldHave(text("Math"));
+            $x("//td[text() = 'Hobbies']/../td[2]").shouldHave(text("Sports"));
+            $x("//td[text() = 'Address']/../td[2]").shouldHave(text(currentAddress));
+            $x("//td[text() = 'State and City']/../td[2]").shouldHave(text("NCR Delhi"));
         });
     }
 }
