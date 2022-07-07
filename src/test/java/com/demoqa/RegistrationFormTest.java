@@ -29,6 +29,8 @@ public class RegistrationFormTest extends BaseTest {
         step("Open registration form", () -> {
             open("/automation-practice-form");
             $(".practice-form-wrapper").shouldHave(text("Student Registration Form"));
+            executeJavaScript("$('footer').remove()");
+            executeJavaScript("$('#fixedban').remove()");
         });
 
         step("Fill registration form", () -> {
@@ -58,7 +60,6 @@ public class RegistrationFormTest extends BaseTest {
             $("#stateCity-wrapper").$(byText("Delhi")).click();
         });
 
-        //todo баг, кнопка скрыта. разобраться
         step("Submit registration form", () -> {
             $("#submit").click();
         });
