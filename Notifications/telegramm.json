@@ -1,0 +1,17 @@
+{
+  "base": {
+    "project": "Test project PL",
+    "environment": "Telegram allure-result bot",
+    "comment": "Test results",
+    "reportLink": "",
+    "language": "en",
+    "messenger": "telegram",
+    "allureFolder": "build/allure-report/allureReport/",
+    "enableChart": true
+  },
+  "telegram": {
+    "token": "5387048786:AAF7WldtgaHqFAXIt_TaX2MvdOHSkp_ujh0",
+    "chat": "993593309",
+    "replyTo": ""
+  }
+}

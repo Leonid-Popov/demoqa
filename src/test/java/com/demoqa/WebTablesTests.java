@@ -12,10 +12,10 @@ import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.*;
 import static io.qameta.allure.Allure.step;
 
+@Tag("demoqa")
 public class WebTablesTests extends BaseTest {
 
     @BeforeEach
-    @Tag("demoqa")
     void openPage() {
         step("Open webtable page", () -> {
             open("/webtables");
