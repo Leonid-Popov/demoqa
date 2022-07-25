@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Locale;
 
 import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Condition.value;
 import static com.codeborne.selenide.Selenide.*;
 import static io.qameta.allure.Allure.step;
 
@@ -159,8 +160,9 @@ public class WebTablesTests extends BaseTest {
     @DisplayName("Validation email field test")
     void validationEmailFieldTest() {
 
+        //Создаем новый невалидный email
         Faker faker = new Faker();
-        String userEmail = faker.name().fullName() + "@gmail.com";
+        String invalidUserEmail = faker.name().fullName() + "@gmail.com";
 
         //Заполняем форму
         step("Fill form", () -> {
@@ -168,7 +170,7 @@ public class WebTablesTests extends BaseTest {
             $(".modal-title").shouldHave(text("Registration Form"));
             $("#firstName").setValue(name);
             $("#lastName").setValue(lastName);
-            $("#userEmail").setValue(userEmail);
+            $("#userEmail").setValue(invalidUserEmail);
             $("#age").setValue("30");
             $("#salary").setValue("50000");
             $("#department").setValue(department);
@@ -177,15 +179,26 @@ public class WebTablesTests extends BaseTest {
 
         //Проверяем результат в таблице
         step("Check warnings in the form", () -> {
-            SelenideElement element = $$(".rt-tr-group").findBy(text(name));
-            element.shouldHave(text(name));
-            element.shouldHave(text(lastName));
-            element.shouldHave(text("30"));
+            $(".modal-title").shouldHave(text("Registration Form"));
+            $x("//input[@id = 'firstName'][@value]").shouldHave(value(name));
+            $x("//input[@id = 'lastName'][@value]").shouldHave(value(lastName));
+            $x("//input[@id = 'age'][@value]").shouldHave(value("30"));
+            $x("//input[@id = 'userEmail'][@value]").shouldHave(value(invalidUserEmail));
+            $x("//input[@id = 'salary'][@value]").shouldHave(value("50000"));
+            $x("//input[@id = 'department'][@value]").shouldHave(value(department));
 
-            //todo: дописать проверку цвета
-//            $("#userEmail").shouldHave()
-            element.shouldHave(text("50000"));
-            element.shouldHave(text(department));
+            //Проверяем цвета элементов валидации
+            //"#28a745" - зеленый
+            //"#dc3545" - красный
+            step("Check fields colors", () -> {
+                        $("#firstName").getCssValue("border-color").equals("#28a745");
+                        $("#lastName").getCssValue("border-color").equals("#28a745");
+                        $("#age").getCssValue("border-color").equals("#28a745");
+                        $("#userEmail").getCssValue("border-color").equals("#dc3545");
+                        $("#salary").getCssValue("border-color").equals("#28a745");
+                        $("#department").getCssValue("border-color").equals("#28a745");
+                    }
+            );
         });
     }
 }
